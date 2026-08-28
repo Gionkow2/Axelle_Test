@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Kokoro — design tokens
+   Single place for brand colour, type, radius, layering and rhythm.
+   Consumed as Tailwind utilities (bg-shadow, text-forest, rounded-blob …)
+   and as CSS variables for the few places that need raw values (SVG, JS).
+   ========================================================================== */
+
+@theme {
+  /* -- brand palette (verified) ------------------------------------------ */
+  --color-shadow: #264005; /* Shadow Green  — deep backgrounds, dark type   */
+  --color-fresh: #9cad52; /* Fresh Green   — mid backgrounds, accents      */
+  --color-pale: #fff7c9; /* Pale Yellow   — light backgrounds, light type */
+  --color-sky: #d9f0ff; /* Sky Blue      — accent only, never large fills */
+  --color-forest: #392918; /* Forest Brown  — deep warm backgrounds/type    */
+
+  /* tints used for organic blobs / hovers (derived, not new brand colours) */
+  --color-fresh-deep: #7f9040;
+  --color-shadow-soft: #33530a;
+  --color-pale-warm: #f4ead0;
+
+  /* -- typography ------------------------------------------------------- */
+  --font-display: var(--font-cagliostro), Georgia, Cambria, "Times New Roman",
+    serif;
+  --font-body: var(--font-bricolage), ui-sans-serif, system-ui, "Segoe UI",
+    "Helvetica Neue", Arial, sans-serif;
+
+  --text-eyebrow: 0.8125rem;
+  --tracking-eyebrow: 0.18em;
+
+  /* fluid display sizes — used by .display-* helpers below */
+  --display-1: clamp(2.75rem, 1.6rem + 5.1vw, 5.25rem);
+  --display-2: clamp(2.25rem, 1.5rem + 3.3vw, 4rem);
+  --display-3: clamp(1.9rem, 1.5rem + 1.8vw, 2.9rem);
+
+  /* -- radius (organic, tactile) -------------------------------------- */
+  --radius-pill: 999px;
+  --radius-card: 1.5rem;
+  --radius-soft: 2.5rem 2.9rem 2.5rem 2.9rem; /* organic panel, no clipping */
+  --radius-blob: 42% 58% 63% 37% / 43% 38% 62% 57%; /* decorative only */
+  --radius-arch: 48% 48% 10% 10% / 26% 26% 7% 7%;
+
+  /* -- layering (see prompt §8) -------------------------------------- */
+  --z-bg: 0;
+  --z-river: 1;
+  --z-media: 2;
+  --z-content: 3;
+  --z-header: 10;
+
+  /* -- shell --------------------------------------------------------- */
+  --container: 75rem; /* 1200px inner content, ~1440 with gutters */
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --section-y: clamp(4.5rem, 9vw, 8.5rem);
+}
+
+/* ------------------------------------------------------------------ base */
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* header height + breathing room for #anchors */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-pale);
+    color: var(--color-forest);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* stop decorative overflow from ever creating a sideways scrollbar */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-shadow);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* keep focus visible on dark sections */
+  .on-dark :focus-visible {
+    outline-color: var(--color-pale);
+  }
+
+  ::selection {
+    background: var(--color-fresh);
+    color: var(--color-shadow);
+  }
+}
+
+/* ------------------------------------------------------------- helpers */
+
+@layer components {
+  .shell {
+    width: min(100% - var(--gutter) * 2, var(--container));
+    margin-inline: auto;
+  }
+
+  .display-1 {
+    font-family: var(--font-display);
+    font-size: var(--display-1);
+    line-height: 0.98;
+  }
+  .display-2 {
+    font-family: var(--font-display);
+    font-size: var(--display-2);
+    line-height: 1.02;
+  }
+  .display-3 {
+    font-family: var(--font-display);
+    font-size: var(--display-3);
+    line-height: 1.06;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-eyebrow);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .prose-kokoro p + p {
+    margin-top: 1.1em;
+  }
+}
+
+/* ----------------------------------------------------------- journey river */
+
+.journey-ribbon {
+  /* driven from JS (rAF); safe defaults for no-JS / first paint */
+  --flow: 1; /* 1 = hidden, 0 = fully drawn   */
+  --drift: 0px; /* vertical parallax offset       */
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-river);
+  pointer-events: none;
+  overflow: clip;
+}
+
+.journey-ribbon svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate3d(0, var(--drift), 0);
+  will-change: transform;
+}
+
+.journey-ribbon .jr-reveal-path {
+  stroke-dashoffset: var(--flow);
+}
+
+.journey-ribbon .jr-glint {
+  animation: jr-glint-move 3.6s linear infinite;
+}
+
+@keyframes jr-glint-move {
+  to {
+    stroke-dashoffset: -176;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-ribbon {
+    --flow: 0 !important; /* show the finished stream, statically */
+    --drift: 0px !important;
+  }
+  .journey-ribbon svg {
+    transform: none;
+  }
+  .journey-ribbon .jr-glint {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------- reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

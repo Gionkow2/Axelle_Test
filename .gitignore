@@ -1,0 +1,25 @@
+# dependencies / build output
+node_modules
+.next
+out
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# generated visual-check output (regenerate: node scripts/shoot.mjs)
+screenshots/
+
+# ---------------------------------------------------------------------------
+# Supplied source material — kept out of git (~170MB, and contains personal
+# photography + the client's print-ready brand files). Keep these locally;
+# they are the design input, not part of the running site.
+#
+# NOTE: public/assets/kokoro/ IS committed — those are the optimised
+# production images the site needs to build and render.
+# ---------------------------------------------------------------------------
+brand-reference/
+brandbook/
+design-reference/
+kokoro-tone-of-voice/
+pictures_of_axelle/
