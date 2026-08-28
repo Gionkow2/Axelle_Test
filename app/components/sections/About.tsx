@@ -1,19 +1,42 @@
 import OrganicMedia from "@/app/components/ui/OrganicMedia";
 import Eyebrow from "@/app/components/ui/Eyebrow";
 import EnsoMark from "@/app/components/ui/EnsoMark";
+import {
+  ScrollScene,
+  ParallaxLayer,
+  FloatingHeading,
+  AmbientWord,
+} from "@/app/components/motion/primitives";
+import { motion, ambientVocab } from "@/lib/motion";
 import { about } from "@/lib/data/content";
 
+/**
+ * About — heading, portrait and inset sit on three separate soft depths
+ * while the body copy stays completely stable for comfortable reading.
+ */
 export default function About() {
   return (
-    <section
+    <ScrollScene
       id={about.id}
       className="relative overflow-hidden bg-pale py-[var(--section-y)]"
     >
-      <div className="shell grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
+      <AmbientWord
+        speed={motion.about.markShift}
+        className="left-[4%] top-[12%] hidden lg:block"
+      >
+        {ambientVocab.about}
+      </AmbientWord>
+
+      <div className="shell relative grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         {/* copy */}
         <div className="max-w-xl">
           <Eyebrow tone="shadow">{about.eyebrow}</Eyebrow>
-          <h2 className="display-2 mt-4 text-shadow">{about.title}</h2>
+          <FloatingHeading
+            speed={motion.about.headingShift}
+            className="display-2 mt-4 text-shadow"
+          >
+            {about.title}
+          </FloatingHeading>
 
           <p className="mt-7 text-xl leading-snug text-forest">{about.lead}</p>
 
@@ -39,17 +62,19 @@ export default function About() {
           </div>
         </div>
 
-        {/* media cluster */}
+        {/* media cluster — portrait and inset drift on separate depths */}
         <div className="relative mx-auto w-full max-w-[30rem]">
-          <OrganicMedia
-            image={about.image}
-            shape="arch"
-            frame="fresh"
-            frameSide="br"
-            sizes="(max-width: 1024px) 80vw, 30vw"
-            ratio="4 / 5"
-            objectPosition="50% 30%"
-          />
+          <ParallaxLayer speed={motion.about.portraitShift}>
+            <OrganicMedia
+              image={about.image}
+              shape="arch"
+              frame="fresh"
+              frameSide="br"
+              sizes="(max-width: 1024px) 80vw, 30vw"
+              ratio="4 / 5"
+              objectPosition="50% 30%"
+            />
+          </ParallaxLayer>
 
           {/* sky badge — "opgeleid in Thailand" */}
           <div className="absolute -left-4 top-8 grid h-28 w-28 rotate-[-8deg] place-items-center rounded-full bg-sky text-center sm:-left-8">
@@ -59,7 +84,10 @@ export default function About() {
           </div>
 
           {/* inset — hands */}
-          <div className="absolute -bottom-10 -left-6 w-40 sm:w-48">
+          <ParallaxLayer
+            speed={motion.about.insetShift}
+            className="absolute -bottom-10 -left-6 w-40 sm:w-48"
+          >
             <OrganicMedia
               image={about.inset}
               shape="arch"
@@ -68,9 +96,9 @@ export default function About() {
               sizes="12rem"
               ratio="3 / 4"
             />
-          </div>
+          </ParallaxLayer>
         </div>
       </div>
-    </section>
+    </ScrollScene>
   );
 }

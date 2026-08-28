@@ -10,12 +10,18 @@ const CONTACT_HREF: Record<string, string> = {
   Instagram: contact.instagramHref,
 };
 
+/**
+ * Footer — the journey comes to rest. Only the logo mark moves, by a few px
+ * as the footer enters. Contact details, links and legal text never move.
+ */
 export default function Footer() {
   return (
-    <footer className="on-dark bg-shadow text-pale">
+    <footer data-scene className="on-dark bg-shadow text-pale">
       <div className="shell grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:py-20">
         <div className="max-w-xs">
-          <BrandLogo size={44} icon="fresh" word="pale" sub="pale" title="Kokoro Organic Massage" />
+          <span className="footer-mark inline-block">
+            <BrandLogo size={44} icon="fresh" word="pale" sub="pale" title="Kokoro Organic Massage" />
+          </span>
           <p className="mt-5 text-[0.95rem] leading-relaxed text-pale/75">
             {footer.blurb}
           </p>

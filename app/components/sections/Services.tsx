@@ -3,6 +3,11 @@ import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import SectionWave from "@/app/components/ui/SectionWave";
 import EnsoMark from "@/app/components/ui/EnsoMark";
+import {
+  ScrollScene,
+  ParallaxLayer,
+} from "@/app/components/motion/primitives";
+import { motion } from "@/lib/motion";
 import { services } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
@@ -35,19 +40,22 @@ const TONE: Record<
 
 export default function Services() {
   return (
-    <section
+    <ScrollScene
       id={services.id}
       className="relative overflow-hidden bg-pale pb-[calc(var(--section-y)+3rem)] pt-[var(--section-y)]"
     >
-      <EnsoMark
-        className="-right-32 top-4 hidden md:block"
-        color="fresh"
-        opacity={0.14}
-        size={360}
-      />
+      <ParallaxLayer
+        as="div"
+        speed={motion.services.markShift}
+        aria-hidden
+        className="pointer-events-none absolute -right-32 top-4 hidden md:block"
+      >
+        <EnsoMark className="!static" color="fresh" opacity={0.14} size={360} />
+      </ParallaxLayer>
 
       <div className="shell relative">
-        <div className="grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
+        {/* heading stays gently anchored on desktop, static on mobile */}
+        <div className="services-head grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
           <div>
             <Eyebrow tone="fresh">{services.eyebrow}</Eyebrow>
             <h2 className="display-2 mt-4 max-w-[12ch] text-shadow">
@@ -58,20 +66,21 @@ export default function Services() {
         </div>
 
         <ul className="mt-14 grid gap-7 md:grid-cols-3">
-          {services.cards.map((card) => {
+          {services.cards.map((card, i) => {
             const t = TONE[card.tone];
             return (
               <li
                 key={card.title}
-                className="flex flex-col overflow-hidden rounded-[var(--radius-card)] shadow-[0_18px_40px_-24px_rgba(38,64,5,0.4)]"
+                className="service-card flex flex-col overflow-hidden rounded-[var(--radius-card)] shadow-[0_18px_40px_-24px_rgba(38,64,5,0.4)]"
+                style={{ ["--card-i" as string]: i }}
               >
-                <div className="relative aspect-[4/3]">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={card.image.src}
                     alt={card.image.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 30vw"
-                    className="object-cover"
+                    className="service-photo object-cover"
                   />
                 </div>
                 <div className={`flex flex-1 flex-col p-7 ${t.panel}`}>
@@ -101,7 +110,7 @@ export default function Services() {
         </div>
       </div>
 
-      <SectionWave color="forest" height={80} flip />
-    </section>
+      <SectionWave color="forest" height={80} flip drift={7} />
+    </ScrollScene>
   );
 }

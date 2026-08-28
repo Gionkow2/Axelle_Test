@@ -2,23 +2,46 @@ import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import BrandLogo from "@/app/components/ui/BrandLogo";
 import EnsoMark from "@/app/components/ui/EnsoMark";
+import {
+  ScrollScene,
+  ParallaxLayer,
+  FloatingHeading,
+  AmbientWord,
+} from "@/app/components/motion/primitives";
+import { motion, ambientVocab } from "@/lib/motion";
 import { giftCard } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
+/**
+ * GiftCard — the heading drifts slower than the page while the voucher and
+ * its sky halo move slightly faster, opening a little depth between them.
+ * The card never rotates on scroll or follows the cursor.
+ */
 export default function GiftCard() {
   return (
-    <section
+    <ScrollScene
       id={giftCard.id}
       className="relative overflow-hidden bg-pale py-[var(--section-y)]"
     >
-      <div className="shell grid items-center gap-14 md:grid-cols-2 md:gap-10">
+      <AmbientWord
+        speed={motion.gift.markShift}
+        className="right-[4%] top-[10%] hidden lg:block"
+      >
+        {ambientVocab.gift}
+      </AmbientWord>
+
+      <div className="shell relative grid items-center gap-14 md:grid-cols-2 md:gap-10">
         {/* recreated voucher visual (DOM, not an image) */}
         <div className="relative mx-auto grid w-full max-w-[30rem] place-items-center py-8">
-          <div
+          <ParallaxLayer
+            as="div"
+            speed={-16}
             aria-hidden
             className="absolute inset-0 m-auto aspect-square w-[24rem] rounded-full bg-sky"
-          />
-          <div className="relative aspect-[8/5] w-[92%] -rotate-[7deg] overflow-hidden rounded-[var(--radius-card)] bg-shadow p-8 text-pale shadow-[0_32px_70px_-26px_rgba(38,64,5,0.65)]">
+          >
+            <span className="sr-only" />
+          </ParallaxLayer>
+          <div className="gift-card-visual relative aspect-[8/5] w-[92%] overflow-hidden rounded-[var(--radius-card)] bg-shadow p-8 text-pale shadow-[0_32px_70px_-26px_rgba(38,64,5,0.65)]">
             <EnsoMark
               className="-right-12 -top-8 rotate-12"
               color="fresh"
@@ -36,7 +59,12 @@ export default function GiftCard() {
         {/* copy */}
         <div className="max-w-md">
           <Eyebrow tone="fresh">{giftCard.eyebrow}</Eyebrow>
-          <h2 className="display-2 mt-4 text-shadow">{giftCard.title}</h2>
+          <FloatingHeading
+            speed={motion.gift.headingShift}
+            className="display-2 mt-4 text-shadow"
+          >
+            {giftCard.title}
+          </FloatingHeading>
           <p className="mt-6 text-lg text-forest/85">{giftCard.body}</p>
           <div className="mt-8">
             <Button href={contact.bookingHref} on="light" variant="solid">
@@ -45,6 +73,6 @@ export default function GiftCard() {
           </div>
         </div>
       </div>
-    </section>
+    </ScrollScene>
   );
 }

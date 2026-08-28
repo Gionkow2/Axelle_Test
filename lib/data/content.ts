@@ -121,6 +121,25 @@ export const about = {
 
 /* ------------------------------------------------ approach + journey (grouped) */
 
+/**
+ * Copy for the sticky "suspended typography" moment that opens ApproachJourney.
+ *
+ * ⚠️  COPY APPROVAL PENDING
+ * `phrase` is a placeholder from the motion brief. Replace it with the
+ * client-approved line and set `phraseApproved: true`. Keep it here — never
+ * inline it in animation code. It MUST stay three beats so the word-emphasis
+ * timeline still lines up (peaks ≈ river progress 0.26 / 0.53 / 0.80).
+ *
+ * `ambient` uses approved Kokoro vocabulary only.
+ */
+export const approachStory = {
+  phraseApproved: false,
+  phrase: ["Vertragen.", "Voelen.", "Thuiskomen."],
+  ambient: ["rust", "aarden", "loslaten", "ruimte"],
+  /** Warm, tactile photographs that crossfade behind the phrase (in order). */
+  photos: [images.shoulderMassage, images.handsClasped, images.handWildflowers],
+};
+
 export const approach = {
   id: "aanpak",
   eyebrow: "Mijn holistische aanpak",

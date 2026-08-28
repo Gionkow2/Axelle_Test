@@ -161,52 +161,419 @@
   }
 }
 
+/* ================================================================= motion
+   Page-wide calm scroll motion. ONE controller (MotionController) writes
+   two custom properties on every [data-scene]:
+     --sp   0 … 1   progress through the viewport (sticky: pin → release)
+     --sc  -1 … 1   the same, centred (0 = scene centred)
+   The helpers below turn those into GPU-only transforms. --motion-scale
+   damps every layer together per breakpoint.
+   ------------------------------------------------------------------- */
+
+:root {
+  --motion-scale: 1;
+}
+@media (max-width: 1024px) {
+  :root {
+    --motion-scale: 0.6;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --motion-scale: 0.4;
+  }
+}
+
+/* pre-JS / no-JS resting values so first paint is the correct static frame */
+[data-scene] {
+  --sp: 0.5;
+  --sc: 0;
+}
+[data-scene="sticky"] {
+  --sp: 0;
+}
+
+.pl,
+.float-h {
+  --pspeed: 0px;
+  transform: translate3d(
+    0,
+    calc(var(--sc, 0) * var(--pspeed) * var(--motion-scale)),
+    0
+  );
+  will-change: transform;
+}
+
+.ambient-word {
+  --pspeed: -44px;
+  position: absolute;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1rem + 6vw, 5rem);
+  line-height: 1;
+  color: var(--color-fresh);
+  opacity: 0.08;
+  white-space: nowrap;
+  pointer-events: none;
+  filter: blur(1px);
+  transform: translate3d(
+    0,
+    calc(var(--sc, 0) * var(--pspeed) * var(--motion-scale)),
+    0
+  );
+  will-change: transform;
+}
+@media (max-width: 767px) {
+  .ambient-word {
+    font-size: clamp(2rem, 1rem + 5vw, 3rem);
+    opacity: 0.06;
+  }
+}
+
+.wave-drift {
+  transform: translate3d(
+    0,
+    calc(var(--sc, 0) * var(--wave-drift, 6px) * var(--motion-scale)),
+    0
+  );
+}
+
+/* --- sticky scene ------------------------------------------------- */
+.sticky-scene {
+  position: relative;
+  min-height: var(--sticky-len, 200svh);
+}
+.sticky-inner {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  isolation: isolate;
+}
+
+/* ------------------------------------------------------------------- hero */
+
+.hero-scene {
+  background: var(--color-shadow);
+}
+.hero-stage {
+  display: flex;
+  align-items: flex-end;
+  overflow: clip;
+  padding-block: 8rem 7rem;
+  background: var(--color-shadow);
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform: translate3d(0, calc(var(--sp) * 34px * var(--motion-scale)), 0)
+    scale(calc(1 + var(--sp) * 0.025));
+  will-change: transform;
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  transform: translate3d(0, calc(var(--sp) * -12px * var(--motion-scale)), 0);
+}
+.hero-body {
+  transform: translate3d(0, calc(var(--sp) * -10px * var(--motion-scale)), 0);
+}
+.hero-badges {
+  transform: translate3d(0, calc(var(--sp) * -30px * var(--motion-scale)), 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo,
+  .hero-content,
+  .hero-body,
+  .hero-badges {
+    transform: none !important;
+  }
+  .hero-stage {
+    min-height: 92svh;
+  }
+}
+
+/* --------------------------------------------------------------- services
+   Desktop: heading gently anchored while the cards flow past it, releasing
+   before the section ends. Mobile: plain stacked flow, no stickiness. */
+
+/* The heading is "gently anchored" by drifting slower than the cards rather
+   than by position:sticky. Sticky here corrupted the flow position of the
+   following <ul> (a real 56px overlap), and motion must never break a
+   correct layout. The heading/card speed difference gives the same read. */
+.services-head {
+  transform: translate3d(0, calc(var(--sc) * -16px * var(--motion-scale)), 0);
+}
+.service-card {
+  position: relative;
+  z-index: 1;
+  /* each card drifts a hair differently — 0 / 8 / 16px */
+  transform: translate3d(
+    0,
+    calc(var(--sc) * (8px + var(--card-i) * 7px) * var(--motion-scale)),
+    0
+  );
+}
+.service-photo {
+  transform: translate3d(0, calc(var(--sc) * 14px * var(--motion-scale)), 0)
+    scale(1.06);
+}
+
+/* ------------------------------------------------------ home / testimonials
+   / gift / vision / final — restrained per-section depth. */
+
+.ring-a {
+  transform: translate3d(0, calc(var(--sc) * 40px * var(--motion-scale)), 0);
+}
+.ring-b {
+  transform: translate3d(0, calc(var(--sc) * -26px * var(--motion-scale)), 0);
+}
+.quote-mark {
+  transform: translate3d(0, calc(var(--sc) * 18px * var(--motion-scale)), 0);
+}
+.gift-card-visual {
+  transform: translate3d(0, calc(var(--sc) * 26px * var(--motion-scale)), 0)
+    rotate(-7deg);
+}
+.cta-texture {
+  transform: translate3d(0, calc(var(--sc) * 24px * var(--motion-scale)), 0)
+    scale(1.05);
+}
+.footer-mark {
+  transform: translate3d(0, calc(var(--sc) * 8px * var(--motion-scale)), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-head,
+  .service-card,
+  .service-photo,
+  .ring-a,
+  .ring-b,
+  .quote-mark,
+  .cta-texture,
+  .footer-mark {
+    transform: none !important;
+  }
+  .gift-card-visual {
+    transform: rotate(-7deg) !important;
+  }
+}
+
+/* ================================================== approach journey story
+   The page's richest moment: a pinned typographic beat over crossfading
+   photography with the Journey River filling behind it. Driven entirely by
+   the inherited --sp of the sticky scene — no component-local JS. */
+
+.approach-story {
+  --flow: calc(1 - var(--sp)); /* river reveal */
+  --drift: calc((var(--sp) - 0.5) * 22px); /* river parallax */
+  overflow-x: clip;
+  background: var(--color-pale);
+}
+
+.story-stage {
+  --d1: max(calc(var(--sp) - 0.26), calc(0.26 - var(--sp)));
+  --d2: max(calc(var(--sp) - 0.53), calc(0.53 - var(--sp)));
+  --d3: max(calc(var(--sp) - 0.8), calc(0.8 - var(--sp)));
+  --settle: clamp(0, calc((var(--sp) - 0.88) / 0.12), 1);
+  --e1: max(clamp(0, calc(1 - var(--d1) / 0.17), 1), var(--settle));
+  --e2: max(clamp(0, calc(1 - var(--d2) / 0.19), 1), var(--settle));
+  --e3: max(clamp(0, calc(1 - var(--d3) / 0.18), 1), var(--settle));
+  overflow: clip;
+  display: grid;
+  background: #1b2c05;
+}
+
+/* soft seams so the pale sections above/below bleed into the stage */
+.story-stage::before,
+.story-stage::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: clamp(3rem, 9vh, 7rem);
+  z-index: 2;
+  pointer-events: none;
+}
+.story-stage::before {
+  top: 0;
+  background: linear-gradient(180deg, var(--color-pale), transparent);
+  opacity: clamp(0, calc(1 - var(--sp) / 0.12), 1);
+}
+.story-stage::after {
+  bottom: 0;
+  background: linear-gradient(0deg, var(--color-pale), transparent);
+  opacity: clamp(0, calc((var(--sp) - 0.84) / 0.16), 1);
+}
+
+/* 1 — photography */
+.story-photos {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.story-photo {
+  object-fit: cover;
+  transform: translate3d(0, calc(var(--sp) * -26px * var(--motion-scale)), 0)
+    scale(calc(1 + var(--sp) * 0.03));
+  transform-origin: center;
+  will-change: transform;
+}
+.story-photo-1 {
+  opacity: 1;
+}
+.story-photo-2 {
+  opacity: clamp(0, calc((var(--sp) - 0.22) / 0.22), 1);
+}
+.story-photo-3 {
+  opacity: clamp(0, calc((var(--sp) - 0.54) / 0.22), 1);
+}
+
+/* 2 — warm contrast overlay */
+.story-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      132% 92% at 50% 47%,
+      rgba(14, 26, 2, 0.4) 0%,
+      rgba(14, 26, 2, 0.8) 78%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(22, 38, 4, 0.78) 0%,
+      rgba(26, 42, 8, 0.64) 42%,
+      rgba(42, 30, 15, 0.76) 100%
+    ),
+    rgba(34, 56, 6, 0.3);
+}
+
+/* 3 — journey river */
+.story-stage .journey-ribbon {
+  z-index: 3;
+}
+
+/* 4 — ambient drifting words */
+.story-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: clip;
+}
+.story-word {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1rem + 6.5vw, 5rem);
+  line-height: 1;
+  color: var(--color-pale);
+  opacity: 0.055;
+  white-space: nowrap;
+  filter: blur(1.5px);
+  will-change: transform;
+}
+.story-word-1 {
+  transform: translate3d(0, calc(var(--sp) * -34px * var(--motion-scale)), 0);
+}
+.story-word-2 {
+  transform: translate3d(0, calc(var(--sp) * 46px * var(--motion-scale)), 0);
+  opacity: 0.045;
+}
+.story-word-3 {
+  transform: translate3d(0, calc(var(--sp) * -54px * var(--motion-scale)), 0);
+  opacity: 0.05;
+}
+.story-word-4 {
+  transform: translate3d(0, calc(var(--sp) * 28px * var(--motion-scale)), 0);
+  opacity: 0.04;
+}
+@media (max-width: 767px) {
+  .story-word-2,
+  .story-word-3,
+  .story-word-4 {
+    display: none;
+  }
+}
+
+/* 5 — the anchored phrase (real, selectable text) */
+.story-phrase-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  padding-inline: var(--gutter);
+}
+.story-phrase {
+  max-width: 12ch;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1rem + 6.5vw, 6rem);
+  line-height: 1.12;
+  color: var(--color-pale);
+  text-shadow:
+    0 2px 40px rgba(12, 24, 0, 0.7),
+    0 1px 5px rgba(12, 24, 0, 0.75);
+  transform: translate3d(0, calc(var(--sp) * -8px * var(--motion-scale)), 0);
+  will-change: transform;
+}
+.story-beat {
+  position: relative;
+}
+.story-beat-1 {
+  opacity: calc(0.58 + 0.42 * var(--e1));
+  top: calc(var(--e1) * -7px);
+  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e1) * 34%));
+}
+.story-beat-2 {
+  opacity: calc(0.58 + 0.42 * var(--e2));
+  top: calc(var(--e2) * -7px);
+  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e2) * 34%));
+}
+.story-beat-3 {
+  opacity: calc(0.58 + 0.42 * var(--e3));
+  top: calc(var(--e3) * -7px);
+  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e3) * 34%));
+}
+@media (max-width: 767px) {
+  .story-photo {
+    transform: translate3d(0, calc(var(--sp) * -14px), 0)
+      scale(calc(1 + var(--sp) * 0.02));
+  }
+  .story-phrase {
+    transform: none;
+  }
+}
+
 /* ----------------------------------------------------------- journey river */
 
 .journey-ribbon {
-  /* driven from JS (rAF); safe defaults for no-JS / first paint */
-  --flow: 1; /* 1 = hidden, 0 = fully drawn   */
-  --drift: 0px; /* vertical parallax offset       */
   position: absolute;
   inset: 0;
   z-index: var(--z-river);
   pointer-events: none;
   overflow: clip;
 }
-
 .journey-ribbon svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: translate3d(0, var(--drift), 0);
+  transform: translate3d(0, var(--drift, 0px), 0);
   will-change: transform;
 }
-
 .journey-ribbon .jr-reveal-path {
-  stroke-dashoffset: var(--flow);
+  stroke-dashoffset: var(--flow, 1);
 }
-
 .journey-ribbon .jr-glint {
   animation: jr-glint-move 3.6s linear infinite;
 }
-
 @keyframes jr-glint-move {
   to {
     stroke-dashoffset: -176;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .journey-ribbon {
-    --flow: 0 !important; /* show the finished stream, statically */
-    --drift: 0px !important;
-  }
-  .journey-ribbon svg {
-    transform: none;
-  }
-  .journey-ribbon .jr-glint {
-    display: none;
   }
 }
 
@@ -222,5 +589,48 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  /* freeze every motion layer into its finished static frame */
+  .pl,
+  .float-h,
+  .wave-drift,
+  .story-photo,
+  .story-phrase,
+  .journey-ribbon svg {
+    transform: none !important;
+  }
+  .ambient-word,
+  .story-ambient {
+    display: none;
+  }
+  .sticky-scene {
+    min-height: 0;
+  }
+  .sticky-inner {
+    position: static;
+    min-height: 0;
+  }
+  .approach-story {
+    --flow: 0;
+  }
+  .story-stage {
+    position: relative;
+    height: auto;
+    min-height: 72svh;
+  }
+  .story-photo-2,
+  .story-photo-3 {
+    opacity: 0;
+  }
+  .story-beat-1,
+  .story-beat-2,
+  .story-beat-3 {
+    opacity: 1;
+    top: 0;
+    color: var(--color-pale);
+  }
+  .jr-glint {
+    display: none;
   }
 }
