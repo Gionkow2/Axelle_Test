@@ -171,16 +171,18 @@
    ------------------------------------------------------------------- */
 
 :root {
-  --motion-scale: 1;
+  /* overall motion intensity — one dial for the whole page.
+     ~2× the first restrained pass; still calm, just more present. */
+  --motion-scale: 2;
 }
 @media (max-width: 1024px) {
   :root {
-    --motion-scale: 0.6;
+    --motion-scale: 1.2;
   }
 }
 @media (max-width: 767px) {
   :root {
-    --motion-scale: 0.4;
+    --motion-scale: 0.8;
   }
 }
 

@@ -129,9 +129,9 @@ export default function JourneyRibbon() {
       const raw = (vh * 0.8 - rect.top) / (rect.height + vh * 0.6);
       target = 1 - Math.min(1, Math.max(0, raw));
 
-      // secondary: gentle vertical parallax, ~24px each way
+      // secondary: gentle vertical parallax, ~45px each way
       const seen = (vh - rect.top) / (vh + rect.height);
-      drift = (Math.min(1, Math.max(0, seen)) - 0.5) * 48;
+      drift = (Math.min(1, Math.max(0, seen)) - 0.5) * 90;
 
       // near viewport? keep easing. otherwise snap and rest.
       return rect.bottom > -vh && rect.top < vh * 2;
