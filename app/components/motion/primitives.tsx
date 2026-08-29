@@ -118,24 +118,3 @@ export function FloatingHeading({
     </Tag>
   );
 }
-
-/* ----------------------------------------------------------------- AmbientWord
-   A single faint Cagliostro word drifting behind real content. Decorative. */
-
-type AWProps = {
-  speed?: number;
-  className?: string;
-  children: ReactNode;
-};
-
-export function AmbientWord({ speed = -44, className = "", children }: AWProps) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`ambient-word ${className}`}
-      style={{ ["--pspeed" as string]: `${speed}px` }}
-    >
-      {children}
-    </span>
-  );
-}

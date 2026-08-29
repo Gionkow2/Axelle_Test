@@ -5,9 +5,8 @@ import {
   ScrollScene,
   ParallaxLayer,
   FloatingHeading,
-  AmbientWord,
 } from "@/app/components/motion/primitives";
-import { motion, ambientVocab } from "@/lib/motion";
+import { motion } from "@/lib/motion";
 import { homeMassage } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
@@ -23,12 +22,6 @@ export default function HomeMassage() {
         aria-hidden
         className="ring-b absolute -right-24 top-1/2 h-[22rem] w-[22rem] -translate-y-1/2 rounded-full border-[2.5rem] border-shadow/30"
       />
-      <AmbientWord
-        speed={motion.home.artShift}
-        className="bottom-[8%] left-[3%] hidden text-pale lg:block"
-      >
-        {ambientVocab.home}
-      </AmbientWord>
 
       <div className="shell relative grid items-center gap-12 md:grid-cols-[1.2fr_0.8fr]">
         <div className="max-w-lg">

@@ -6,9 +6,8 @@ import {
   ScrollScene,
   ParallaxLayer,
   FloatingHeading,
-  AmbientWord,
 } from "@/app/components/motion/primitives";
-import { motion, ambientVocab } from "@/lib/motion";
+import { motion } from "@/lib/motion";
 import { giftCard } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
@@ -23,13 +22,6 @@ export default function GiftCard() {
       id={giftCard.id}
       className="relative overflow-hidden bg-pale py-[var(--section-y)]"
     >
-      <AmbientWord
-        speed={motion.gift.markShift}
-        className="right-[4%] top-[10%] hidden lg:block"
-      >
-        {ambientVocab.gift}
-      </AmbientWord>
-
       <div className="shell relative grid items-center gap-14 md:grid-cols-2 md:gap-10">
         {/* recreated voucher visual (DOM, not an image) */}
         <div className="relative mx-auto grid w-full max-w-[30rem] place-items-center py-8">

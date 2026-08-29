@@ -5,9 +5,8 @@ import {
   ScrollScene,
   ParallaxLayer,
   FloatingHeading,
-  AmbientWord,
 } from "@/app/components/motion/primitives";
-import { motion, ambientVocab } from "@/lib/motion";
+import { motion } from "@/lib/motion";
 import { about } from "@/lib/data/content";
 
 /**
@@ -20,13 +19,6 @@ export default function About() {
       id={about.id}
       className="relative overflow-hidden bg-pale py-[var(--section-y)]"
     >
-      <AmbientWord
-        speed={motion.about.markShift}
-        className="left-[4%] top-[12%] hidden lg:block"
-      >
-        {ambientVocab.about}
-      </AmbientWord>
-
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         {/* copy */}
         <div className="max-w-xl">

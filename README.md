@@ -68,56 +68,44 @@ No React state, no re-render per scroll. Everything visible is CSS
 `transform`/`opacity` calc'd from those two values.
 
 **Primitives** (`app/components/motion/primitives.tsx`):
-`ScrollScene` · `StickyScene` · `ParallaxLayer` · `FloatingHeading` ·
-`AmbientWord`, plus the existing `JourneyRibbon` and `SectionWave` (which
-now accepts a `drift` prop so seams breathe).
+`ScrollScene` · `StickyScene` · `ParallaxLayer` · `FloatingHeading`,
+plus the existing `JourneyRibbon` and `SectionWave` (which now accepts a
+`drift` prop so seams breathe).
 
 **Tunables** live in one file: `lib/motion.ts` — per-section travel
-distances, sticky lengths and the ambient vocabulary. A global
+distances and sticky lengths. A global
 `--motion-scale` (1 / 0.6 / 0.4 at desktop / ≤1024 / ≤767) damps every layer
 together, so mobile is calmer without per-section overrides.
 
 **Per section:** hero = short pin (134svh) with photo drift + 2.5% scale ·
-about = heading/portrait/inset on three depths · **ApproachJourney = the
-richest moment** (see below) · services = heading floats slower than the
+about = heading/portrait/inset on three depths · **ApproachJourney** stays exactly as
+on `main` (its own river, see below) · services = heading floats slower than the
 drifting cards · home = two ring depths + floating heading · testimonials =
 title + quote marks only (quote text never moves) · gift = heading vs card
-depth · vision = shorter anchored echo · final CTA = texture only, buttons
+depth · vision = photo + swirl depth · final CTA = texture only, buttons
 rock-stable · footer = logo mark ±8px, everything else settled.
 
 Body copy, buttons, booking links and contact details never parallax.
 
-## ApproachJourney — the richest moment
+## ApproachJourney — the river section (unchanged from `main`)
 
-`ApproachStory` (a `StickyScene`, 210svh) pins a 100svh stage. Layers back
-to front: photography · warm overlay · Journey River · ambient words ·
-anchored phrase. All of it is CSS driven by the scene's inherited `--sp`:
+This block is deliberately **left exactly as the base site**: no page-wide
+scene, no sticky typography. It renders `JourneyRibbon` — a self-contained
+client component with its own rAF scroll controller that writes `--flow`
+(1 → 0, the blue current filling) and `--drift` onto `.journey-ribbon` as the
+wrapper passes through the viewport — plus the approved holistic + organic
+cards. `MotionController` does not touch it.
 
-| derived from `--sp` | effect |
-| --- | --- |
-| `--flow` = `1 − sp` | river reveal-mask `stroke-dashoffset` (`pathLength="1"`) |
-| `--drift` | river parallax ±11px |
-| photo 2 / 3 opacity | crossfade at `0.22–0.44` / `0.54–0.76` (photo 1 always opaque → never blanks) |
-| `--e1/2/3` | per-beat emphasis, triangle peaks at `0.26 / 0.53 / 0.80`, all → 1 in the `0.88–1.0` settle |
-
-`JourneyRibbon` is pure presentational SVG: exact brief path, four strokes
-(riverbed `#9CAD52` w178 o.24 · guide `#D9F0FF` w34 o.16 · current w34 o.85 ·
-pale highlight) sharing one `pathLength="1"` mask, plus a calmer mobile path.
-
-Below the pin, the approved holistic + organic copy continues in normal flow
-with restrained heading/photo depth — the internal boundary between the two
-subjects stays invisible (no wave, no colour change).
-
-The anchored phrase lives in `lib/data/content.ts` as `approachStory.phrase`
-and is flagged **`phraseApproved: false`** — placeholder pending copy sign-off.
+`JourneyRibbon` SVG: exact brief path, four strokes (riverbed `#9CAD52` w178
+· faint blue guide w34 · scroll-revealed current w34 · slow pale highlight)
+sharing one `pathLength="1"` reveal mask, plus a calmer mobile path.
 
 ## Reduced motion
 
 `prefers-reduced-motion: reduce` collapses every sticky wrapper to auto
-height, un-pins the stages, freezes all transforms, hides ambient words and
-the river highlight, shows the completed river and one static photograph per
-section — all in CSS. The controller attaches no listeners at all and just
-pins each scene to its resting frame.
+height, un-pins the stages, freezes all transforms, hides the river
+highlight and shows the completed river — all in CSS. The controller
+attaches no listeners at all and just pins each scene to its resting frame.
 
 ## Responsive breakpoints tested
 

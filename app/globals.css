@@ -204,32 +204,6 @@
   will-change: transform;
 }
 
-.ambient-word {
-  --pspeed: -44px;
-  position: absolute;
-  z-index: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 1rem + 6vw, 5rem);
-  line-height: 1;
-  color: var(--color-fresh);
-  opacity: 0.08;
-  white-space: nowrap;
-  pointer-events: none;
-  filter: blur(1px);
-  transform: translate3d(
-    0,
-    calc(var(--sc, 0) * var(--pspeed) * var(--motion-scale)),
-    0
-  );
-  will-change: transform;
-}
-@media (max-width: 767px) {
-  .ambient-word {
-    font-size: clamp(2rem, 1rem + 5vw, 3rem);
-    opacity: 0.06;
-  }
-}
-
 .wave-drift {
   transform: translate3d(
     0,
@@ -359,198 +333,14 @@
   }
 }
 
-/* ================================================== approach journey story
-   The page's richest moment: a pinned typographic beat over crossfading
-   photography with the Journey River filling behind it. Driven entirely by
-   the inherited --sp of the sticky scene — no component-local JS. */
-
-.approach-story {
-  --flow: calc(1 - var(--sp)); /* river reveal */
-  --drift: calc((var(--sp) - 0.5) * 22px); /* river parallax */
-  overflow-x: clip;
-  background: var(--color-pale);
-}
-
-.story-stage {
-  --d1: max(calc(var(--sp) - 0.26), calc(0.26 - var(--sp)));
-  --d2: max(calc(var(--sp) - 0.53), calc(0.53 - var(--sp)));
-  --d3: max(calc(var(--sp) - 0.8), calc(0.8 - var(--sp)));
-  --settle: clamp(0, calc((var(--sp) - 0.88) / 0.12), 1);
-  --e1: max(clamp(0, calc(1 - var(--d1) / 0.17), 1), var(--settle));
-  --e2: max(clamp(0, calc(1 - var(--d2) / 0.19), 1), var(--settle));
-  --e3: max(clamp(0, calc(1 - var(--d3) / 0.18), 1), var(--settle));
-  overflow: clip;
-  display: grid;
-  background: #1b2c05;
-}
-
-/* soft seams so the pale sections above/below bleed into the stage */
-.story-stage::before,
-.story-stage::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  height: clamp(3rem, 9vh, 7rem);
-  z-index: 2;
-  pointer-events: none;
-}
-.story-stage::before {
-  top: 0;
-  background: linear-gradient(180deg, var(--color-pale), transparent);
-  opacity: clamp(0, calc(1 - var(--sp) / 0.12), 1);
-}
-.story-stage::after {
-  bottom: 0;
-  background: linear-gradient(0deg, var(--color-pale), transparent);
-  opacity: clamp(0, calc((var(--sp) - 0.84) / 0.16), 1);
-}
-
-/* 1 — photography */
-.story-photos {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-.story-photo {
-  object-fit: cover;
-  transform: translate3d(0, calc(var(--sp) * -26px * var(--motion-scale)), 0)
-    scale(calc(1 + var(--sp) * 0.03));
-  transform-origin: center;
-  will-change: transform;
-}
-.story-photo-1 {
-  opacity: 1;
-}
-.story-photo-2 {
-  opacity: clamp(0, calc((var(--sp) - 0.22) / 0.22), 1);
-}
-.story-photo-3 {
-  opacity: clamp(0, calc((var(--sp) - 0.54) / 0.22), 1);
-}
-
-/* 2 — warm contrast overlay */
-.story-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      132% 92% at 50% 47%,
-      rgba(14, 26, 2, 0.4) 0%,
-      rgba(14, 26, 2, 0.8) 78%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(22, 38, 4, 0.78) 0%,
-      rgba(26, 42, 8, 0.64) 42%,
-      rgba(42, 30, 15, 0.76) 100%
-    ),
-    rgba(34, 56, 6, 0.3);
-}
-
-/* 3 — journey river */
-.story-stage .journey-ribbon {
-  z-index: 3;
-}
-
-/* 4 — ambient drifting words */
-.story-ambient {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  overflow: clip;
-}
-.story-word {
-  position: absolute;
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 1rem + 6.5vw, 5rem);
-  line-height: 1;
-  color: var(--color-pale);
-  opacity: 0.055;
-  white-space: nowrap;
-  filter: blur(1.5px);
-  will-change: transform;
-}
-.story-word-1 {
-  transform: translate3d(0, calc(var(--sp) * -34px * var(--motion-scale)), 0);
-}
-.story-word-2 {
-  transform: translate3d(0, calc(var(--sp) * 46px * var(--motion-scale)), 0);
-  opacity: 0.045;
-}
-.story-word-3 {
-  transform: translate3d(0, calc(var(--sp) * -54px * var(--motion-scale)), 0);
-  opacity: 0.05;
-}
-.story-word-4 {
-  transform: translate3d(0, calc(var(--sp) * 28px * var(--motion-scale)), 0);
-  opacity: 0.04;
-}
-@media (max-width: 767px) {
-  .story-word-2,
-  .story-word-3,
-  .story-word-4 {
-    display: none;
-  }
-}
-
-/* 5 — the anchored phrase (real, selectable text) */
-.story-phrase-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  padding-inline: var(--gutter);
-}
-.story-phrase {
-  max-width: 12ch;
-  margin: 0;
-  text-align: center;
-  text-wrap: balance;
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 1rem + 6.5vw, 6rem);
-  line-height: 1.12;
-  color: var(--color-pale);
-  text-shadow:
-    0 2px 40px rgba(12, 24, 0, 0.7),
-    0 1px 5px rgba(12, 24, 0, 0.75);
-  transform: translate3d(0, calc(var(--sp) * -8px * var(--motion-scale)), 0);
-  will-change: transform;
-}
-.story-beat {
-  position: relative;
-}
-.story-beat-1 {
-  opacity: calc(0.58 + 0.42 * var(--e1));
-  top: calc(var(--e1) * -7px);
-  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e1) * 34%));
-}
-.story-beat-2 {
-  opacity: calc(0.58 + 0.42 * var(--e2));
-  top: calc(var(--e2) * -7px);
-  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e2) * 34%));
-}
-.story-beat-3 {
-  opacity: calc(0.58 + 0.42 * var(--e3));
-  top: calc(var(--e3) * -7px);
-  color: color-mix(in srgb, var(--color-pale), var(--color-sky) calc(var(--e3) * 34%));
-}
-@media (max-width: 767px) {
-  .story-photo {
-    transform: translate3d(0, calc(var(--sp) * -14px), 0)
-      scale(calc(1 + var(--sp) * 0.02));
-  }
-  .story-phrase {
-    transform: none;
-  }
-}
-
-/* ----------------------------------------------------------- journey river */
+/* ----------------------------------------------------------- journey river
+   Self-contained: JourneyRibbon owns its own rAF scroll controller and
+   writes --flow / --drift onto .journey-ribbon (see the component). The page
+   MotionController does not touch this section. */
 
 .journey-ribbon {
+  --flow: 1; /* 1 = hidden, 0 = fully drawn */
+  --drift: 0px; /* vertical parallax offset  */
   position: absolute;
   inset: 0;
   z-index: var(--z-river);
@@ -562,11 +352,11 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: translate3d(0, var(--drift, 0px), 0);
+  transform: translate3d(0, var(--drift), 0);
   will-change: transform;
 }
 .journey-ribbon .jr-reveal-path {
-  stroke-dashoffset: var(--flow, 1);
+  stroke-dashoffset: var(--flow);
 }
 .journey-ribbon .jr-glint {
   animation: jr-glint-move 3.6s linear infinite;
@@ -591,18 +381,11 @@
     transition-duration: 0.001ms !important;
   }
 
-  /* freeze every motion layer into its finished static frame */
+  /* freeze every page-wide motion layer into its static frame */
   .pl,
   .float-h,
-  .wave-drift,
-  .story-photo,
-  .story-phrase,
-  .journey-ribbon svg {
+  .wave-drift {
     transform: none !important;
-  }
-  .ambient-word,
-  .story-ambient {
-    display: none;
   }
   .sticky-scene {
     min-height: 0;
@@ -611,26 +394,16 @@
     position: static;
     min-height: 0;
   }
-  .approach-story {
-    --flow: 0;
+
+  /* journey river: show the finished stream, statically */
+  .journey-ribbon {
+    --flow: 0 !important;
+    --drift: 0px !important;
   }
-  .story-stage {
-    position: relative;
-    height: auto;
-    min-height: 72svh;
+  .journey-ribbon svg {
+    transform: none;
   }
-  .story-photo-2,
-  .story-photo-3 {
-    opacity: 0;
-  }
-  .story-beat-1,
-  .story-beat-2,
-  .story-beat-3 {
-    opacity: 1;
-    top: 0;
-    color: var(--color-pale);
-  }
-  .jr-glint {
+  .journey-ribbon .jr-glint {
     display: none;
   }
 }
