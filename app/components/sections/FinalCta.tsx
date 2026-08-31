@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import {
   ScrollScene,
@@ -31,12 +30,9 @@ export default function FinalCta() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-shadow/85" />
 
       <div className="shell text-center">
-        <Eyebrow tone="fresh" className="block text-center">
-          {finalCta.eyebrow}
-        </Eyebrow>
         <FloatingHeading
           speed={motion.finalCta.headingShift}
-          className="display-1 mx-auto mt-4 max-w-[16ch] text-pale"
+          className="display-1 mx-auto max-w-[16ch] text-pale"
         >
           {finalCta.title}
         </FloatingHeading>

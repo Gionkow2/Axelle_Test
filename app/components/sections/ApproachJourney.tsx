@@ -1,5 +1,4 @@
 import OrganicMedia from "@/app/components/ui/OrganicMedia";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Pill from "@/app/components/ui/Pill";
 import EnsoMark from "@/app/components/ui/EnsoMark";
 import JourneyRibbon from "@/app/components/ui/JourneyRibbon";
@@ -20,13 +19,15 @@ import { approach, organic } from "@/lib/data/content";
  */
 export default function ApproachJourney() {
   return (
-    <div className="relative isolate overflow-x-clip bg-pale">
+    // extra top / bottom room so the river flows in fully from the About
+    // section and out again before Services — never chopped at a seam
+    <div className="relative isolate overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.4)] pt-[calc(var(--section-y)*1.2)]">
       <JourneyRibbon />
 
       {/* ---------------------------------------------------- holistic aanpak */}
       <ScrollScene
         id={approach.id}
-        className="relative z-[var(--z-content)] pt-[var(--section-y)]"
+        className="relative z-[var(--z-content)] pt-[calc(var(--section-y)*0.5)]"
       >
         {/* faint swirl echo, decorative — drifts on its own depth */}
         <ParallaxLayer
@@ -51,10 +52,9 @@ export default function ApproachJourney() {
           </ParallaxLayer>
 
           <div className="relative rounded-[var(--radius-soft)] bg-shadow p-9 pb-10 text-pale sm:p-12 sm:pb-12 lg:-ml-16">
-            <Eyebrow tone="fresh">{approach.eyebrow}</Eyebrow>
             <FloatingHeading
               speed={-18}
-              className="display-3 mt-4 max-w-[18ch] text-pale"
+              className="display-3 max-w-[18ch] text-pale"
             >
               {approach.title}
             </FloatingHeading>
@@ -83,12 +83,11 @@ export default function ApproachJourney() {
       {/* ---------------------------------------------------- waarom organic */}
       <ScrollScene
         id={organic.id}
-        className="relative z-[var(--z-content)] -mt-6 pb-[calc(var(--section-y)*0.5)] pt-[calc(var(--section-y)*0.75)] lg:-mt-16"
+        className="relative z-[var(--z-content)] pb-[calc(var(--section-y)*0.9)] pt-[calc(var(--section-y)*1.5)]"
       >
         <div className="shell grid items-center gap-10 lg:grid-cols-[1.1fr_0.95fr] lg:gap-6">
           <div className="relative rounded-[var(--radius-soft)] bg-fresh p-9 text-shadow sm:p-12 lg:-mr-16 lg:p-14">
-            <Eyebrow tone="shadow">{organic.eyebrow}</Eyebrow>
-            <FloatingHeading speed={-18} className="display-3 mt-4 text-shadow">
+            <FloatingHeading speed={-18} className="display-3 text-shadow">
               {organic.title}
             </FloatingHeading>
             <div className="prose-kokoro mt-5 text-forest/90">

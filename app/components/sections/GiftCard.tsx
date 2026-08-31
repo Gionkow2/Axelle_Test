@@ -1,4 +1,3 @@
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import BrandLogo from "@/app/components/ui/BrandLogo";
 import EnsoMark from "@/app/components/ui/EnsoMark";
@@ -29,7 +28,7 @@ export default function GiftCard() {
             as="div"
             speed={-16}
             aria-hidden
-            className="absolute inset-0 m-auto aspect-square w-[24rem] rounded-full bg-sky"
+            className="absolute inset-0 m-auto aspect-square w-[24rem] rounded-full bg-fresh/70"
           >
             <span className="sr-only" />
           </ParallaxLayer>
@@ -50,10 +49,9 @@ export default function GiftCard() {
 
         {/* copy */}
         <div className="max-w-md">
-          <Eyebrow tone="fresh">{giftCard.eyebrow}</Eyebrow>
           <FloatingHeading
             speed={motion.gift.headingShift}
-            className="display-2 mt-4 text-shadow"
+            className="display-2 text-shadow"
           >
             {giftCard.title}
           </FloatingHeading>

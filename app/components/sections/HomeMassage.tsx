@@ -1,4 +1,3 @@
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import SectionWave from "@/app/components/ui/SectionWave";
 import {
@@ -25,10 +24,9 @@ export default function HomeMassage() {
 
       <div className="shell relative grid items-center gap-12 md:grid-cols-[1.2fr_0.8fr]">
         <div className="max-w-lg">
-          <Eyebrow tone="sky">{homeMassage.eyebrow}</Eyebrow>
           <FloatingHeading
             speed={motion.home.headingShift}
-            className="display-2 mt-4 text-pale"
+            className="display-2 text-pale"
           >
             {homeMassage.title}
           </FloatingHeading>

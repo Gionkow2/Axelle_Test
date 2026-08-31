@@ -1,5 +1,4 @@
 import OrganicMedia from "@/app/components/ui/OrganicMedia";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import EnsoMark from "@/app/components/ui/EnsoMark";
 import {
   ScrollScene,
@@ -22,10 +21,9 @@ export default function About() {
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         {/* copy */}
         <div className="max-w-xl">
-          <Eyebrow tone="shadow">{about.eyebrow}</Eyebrow>
           <FloatingHeading
             speed={motion.about.headingShift}
-            className="display-2 mt-4 text-shadow"
+            className="display-2 text-shadow"
           >
             {about.title}
           </FloatingHeading>
@@ -68,8 +66,8 @@ export default function About() {
             />
           </ParallaxLayer>
 
-          {/* sky badge — "opgeleid in Thailand" */}
-          <div className="absolute -left-4 top-8 grid h-28 w-28 rotate-[-8deg] place-items-center rounded-full bg-sky text-center sm:-left-8">
+          {/* badge — "opgeleid in Thailand" */}
+          <div className="absolute -left-4 top-8 grid h-28 w-28 rotate-[-8deg] place-items-center rounded-full bg-fresh text-center sm:-left-8">
             <span className="px-3 text-[0.85rem] font-semibold leading-tight text-shadow">
               {about.imageBadge}
             </span>

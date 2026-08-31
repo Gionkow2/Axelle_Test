@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import SectionWave from "@/app/components/ui/SectionWave";
 import EnsoMark from "@/app/components/ui/EnsoMark";
@@ -12,7 +11,7 @@ import { services } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
 const TONE: Record<
-  "forest" | "green" | "sky",
+  "forest" | "green" | "brown",
   { panel: string; kicker: string; title: string; body: string; rule: string }
 > = {
   forest: {
@@ -29,12 +28,12 @@ const TONE: Record<
     body: "text-forest/85",
     rule: "border-shadow/25",
   },
-  sky: {
-    panel: "bg-sky",
-    kicker: "text-shadow/60",
-    title: "text-shadow",
-    body: "text-forest/80",
-    rule: "border-shadow/20",
+  brown: {
+    panel: "bg-forest",
+    kicker: "text-pale/70",
+    title: "text-pale",
+    body: "text-pale/80",
+    rule: "border-pale/20",
   },
 };
 
@@ -54,16 +53,9 @@ export default function Services() {
       </ParallaxLayer>
 
       <div className="shell relative">
-        {/* heading stays gently anchored on desktop, static on mobile */}
-        <div className="services-head grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
-          <div>
-            <Eyebrow tone="fresh">{services.eyebrow}</Eyebrow>
-            <h2 className="display-2 mt-4 max-w-[12ch] text-shadow">
-              {services.title}
-            </h2>
-          </div>
-          <p className="text-forest/80 md:pb-2">{services.intro}</p>
-        </div>
+        <h2 className="services-head display-2 max-w-[16ch] text-shadow">
+          {services.title}
+        </h2>
 
         <ul className="mt-14 grid gap-7 md:grid-cols-3">
           {services.cards.map((card, i) => {
@@ -84,8 +76,7 @@ export default function Services() {
                   />
                 </div>
                 <div className={`flex flex-1 flex-col p-7 ${t.panel}`}>
-                  <p className={`eyebrow ${t.kicker}`}>{card.kicker}</p>
-                  <h3 className={`display-3 mt-2 text-[1.6rem] ${t.title}`}>
+                  <h3 className={`display-3 text-[1.6rem] ${t.title}`}>
                     {card.title}
                   </h3>
                   <p className={`mt-3 flex-1 text-[0.95rem] leading-relaxed ${t.body}`}>

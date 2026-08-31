@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
 import Pill from "@/app/components/ui/Pill";
 import SectionWave from "@/app/components/ui/SectionWave";
+import BrandLogo from "@/app/components/ui/BrandLogo";
 import { StickyScene } from "@/app/components/motion/primitives";
 import { motion } from "@/lib/motion";
 import { hero } from "@/lib/data/content";
@@ -23,7 +23,7 @@ export default function Hero() {
       length={motion.hero.length}
       className="hero-scene on-dark isolate text-pale"
       innerClassName="hero-stage"
-      aria-label={hero.eyebrow}
+      aria-label={hero.welcome}
     >
       {/* full-bleed photograph + tints (decorative) */}
       <div className="hero-photo" aria-hidden>
@@ -47,7 +47,12 @@ export default function Hero() {
 
       <div className="hero-content shell">
         <div className="max-w-2xl">
-          <Eyebrow tone="fresh">{hero.eyebrow}</Eyebrow>
+          <p className="flex items-center gap-3">
+            <BrandLogo variant="icon" size={40} icon="fresh" />
+            <span className="font-display text-xl text-pale/90">
+              {hero.welcome}
+            </span>
+          </p>
           <h1 className="hero-title display-1 mt-5 text-pale">
             {hero.titleLead}{" "}
             <span className="block text-pale">{hero.titleAccent}</span>

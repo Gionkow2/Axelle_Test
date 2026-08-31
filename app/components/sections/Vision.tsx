@@ -1,5 +1,4 @@
 import OrganicMedia from "@/app/components/ui/OrganicMedia";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import EnsoMark from "@/app/components/ui/EnsoMark";
 import SectionWave from "@/app/components/ui/SectionWave";
 import {
@@ -28,11 +27,7 @@ export default function Vision() {
 
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <div className="max-w-xl">
-          <Eyebrow tone="fresh">{vision.eyebrow}</Eyebrow>
-          <FloatingHeading
-            speed={-16}
-            className="display-2 mt-4 text-shadow"
-          >
+          <FloatingHeading speed={-16} className="display-2 text-shadow">
             {vision.title}
           </FloatingHeading>
           <div className="prose-kokoro mt-6 text-forest/85">

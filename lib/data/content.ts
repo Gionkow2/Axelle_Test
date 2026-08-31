@@ -92,6 +92,7 @@ export const nav: NavLink[] = [
 
 export const hero = {
   eyebrow: "Aandacht voor lichaam & geest",
+  welcome: "Welkom bij Kokoro",
   titleLead: "Jouw plek voor",
   titleAccent: "rust & welzijn.",
   body: "Kom tot rust en laat je hoofd volledig leegmaken. Met mijn holistische aanpak zorg ik voor de massage die jij op dit moment nodig hebt.",
@@ -157,7 +158,7 @@ export type ServiceCard = {
   title: string;
   body: string;
   meta: string;
-  tone: "forest" | "green" | "sky";
+  tone: "forest" | "green" | "brown";
   image: ImageAsset;
 };
 
@@ -165,8 +166,6 @@ export const services = {
   id: "massages",
   eyebrow: "De massages",
   title: "Wat heeft jouw lichaam vandaag nodig?",
-  intro:
-    "Of je nu stijve spieren hebt, veel achter een bureau zit of gewoon toe bent aan rust: er is altijd een massage die bij jou past.",
   metaFallback: "Duur & prijs op aanvraag",
   cards: [
     {
@@ -190,7 +189,7 @@ export const services = {
       title: "Voetreflexologie",
       body: "Deze massage focust op je voeten en helpt je van top tot teen te ontspannen. Heerlijk als afsluiter van een lange dag.",
       meta: "Duur & prijs op aanvraag",
-      tone: "sky",
+      tone: "brown",
       image: images.handsClasped,
     },
   ] satisfies ServiceCard[],
@@ -216,8 +215,6 @@ export type Testimonial = { quote: string; author: string };
 export const testimonials = {
   eyebrow: "Wat klanten zeggen",
   title: "Een warm gevoel dat blijft.",
-  intro:
-    "Persoonlijke aandacht, een veilige sfeer en alle tijd om echt te ontspannen.",
   items: [
     {
       quote:
