@@ -51,24 +51,61 @@ optimised production images in `public/assets/kokoro/`.
 
 Editing text never means touching JSX — change `lib/data/content.ts`.
 
-## The Journey River
+## Page-wide motion system
 
-`app/components/ui/JourneyRibbon.tsx`, mounted once inside the
-`ApproachJourney` wrapper (`app/components/sections/ApproachJourney.tsx`),
-which owns it and spans both the *holistic approach* and *organic* sections.
+One calm motion language across the whole page (Utopia referenced for *feel*
+only — nothing visual copied).
 
-- Four strokes share **one** path per breakpoint (desktop + a calmer mobile
-  path): permanent green riverbed, faint blue guide, scroll-revealed blue
-  current, and a slow pale highlight. Current + highlight use the same
-  `pathLength="1"` reveal mask.
-- A passive `scroll` listener schedules one `requestAnimationFrame`. Inside
-  it we read the wrapper rect, compute
-  `progress = clamp((vh*0.8 − top) / (height + vh*0.6), 0, 1)`, set
-  `--flow = 1 − progress` (eased) and `--drift` (≤ ~24px parallax) as CSS
-  custom properties on the ribbon root. No React re-render per scroll.
-- `prefers-reduced-motion: reduce` → `--flow` is pinned to `0` (complete
-  static stream), highlight hidden, parallax disabled. Geometry recomputes
-  on resize.
+**One controller.** `app/components/motion/MotionController.tsx` — a single
+passive scroll listener + one rAF loop + one IntersectionObserver. Each frame
+it reads every near-viewport `[data-scene]` rect (all reads first), then
+writes two custom properties (all writes after):
+
+- `--sp` `0…1` progress through the viewport (sticky scenes: pinned → released)
+- `--sc` `-1…0…1` the same, centred (0 = scene centred)
+
+No React state, no re-render per scroll. Everything visible is CSS
+`transform`/`opacity` calc'd from those two values.
+
+**Primitives** (`app/components/motion/primitives.tsx`):
+`ScrollScene` · `StickyScene` · `ParallaxLayer` · `FloatingHeading`,
+plus the existing `JourneyRibbon` and `SectionWave` (which now accepts a
+`drift` prop so seams breathe).
+
+**Tunables** live in one file: `lib/motion.ts` — per-section travel
+distances and sticky lengths. A global
+`--motion-scale` (1 / 0.6 / 0.4 at desktop / ≤1024 / ≤767) damps every layer
+together, so mobile is calmer without per-section overrides.
+
+**Per section:** hero = short pin (134svh) with photo drift + 2.5% scale ·
+about = heading/portrait/inset on three depths · **ApproachJourney** stays exactly as
+on `main` (its own river, see below) · services = heading floats slower than the
+drifting cards · home = two ring depths + floating heading · testimonials =
+title + quote marks only (quote text never moves) · gift = heading vs card
+depth · vision = photo + swirl depth · final CTA = texture only, buttons
+rock-stable · footer = logo mark ±8px, everything else settled.
+
+Body copy, buttons, booking links and contact details never parallax.
+
+## ApproachJourney — the river section (unchanged from `main`)
+
+This block is deliberately **left exactly as the base site**: no page-wide
+scene, no sticky typography. It renders `JourneyRibbon` — a self-contained
+client component with its own rAF scroll controller that writes `--flow`
+(1 → 0, the blue current filling) and `--drift` onto `.journey-ribbon` as the
+wrapper passes through the viewport — plus the approved holistic + organic
+cards. `MotionController` does not touch it.
+
+`JourneyRibbon` SVG: exact brief path, four strokes (riverbed `#9CAD52` w178
+· faint blue guide w34 · scroll-revealed current w34 · slow pale highlight)
+sharing one `pathLength="1"` reveal mask, plus a calmer mobile path.
+
+## Reduced motion
+
+`prefers-reduced-motion: reduce` collapses every sticky wrapper to auto
+height, un-pins the stages, freezes all transforms, hides the river
+highlight and shows the completed river — all in CSS. The controller
+attaches no listeners at all and just pins each scene to its resting frame.
 
 ## Responsive breakpoints tested
 

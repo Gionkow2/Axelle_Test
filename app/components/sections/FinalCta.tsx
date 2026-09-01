@@ -1,12 +1,21 @@
 import Image from "next/image";
-import Eyebrow from "@/app/components/ui/Eyebrow";
 import Button from "@/app/components/ui/Button";
+import {
+  ScrollScene,
+  FloatingHeading,
+} from "@/app/components/motion/primitives";
+import { motion } from "@/lib/motion";
 import { finalCta } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
+/**
+ * FinalCta — the page's last breath. Only the background texture and the
+ * heading move, and barely; the buttons are completely stable so the closing
+ * action is never a moving target.
+ */
 export default function FinalCta() {
   return (
-    <section
+    <ScrollScene
       id={finalCta.id}
       className="on-dark relative isolate overflow-hidden bg-shadow py-[calc(var(--section-y)+3rem)] text-pale"
     >
@@ -16,17 +25,17 @@ export default function FinalCta() {
         aria-hidden
         fill
         sizes="100vw"
-        className="-z-10 object-cover"
+        className="cta-texture -z-10 object-cover"
       />
       <div aria-hidden className="absolute inset-0 -z-10 bg-shadow/85" />
 
       <div className="shell text-center">
-        <Eyebrow tone="fresh" className="block text-center">
-          {finalCta.eyebrow}
-        </Eyebrow>
-        <h2 className="display-1 mx-auto mt-4 max-w-[16ch] text-pale">
+        <FloatingHeading
+          speed={motion.finalCta.headingShift}
+          className="display-1 mx-auto max-w-[16ch] text-pale"
+        >
           {finalCta.title}
-        </h2>
+        </FloatingHeading>
         <p className="mx-auto mt-6 max-w-xl text-lg text-pale/85">
           {finalCta.body}
         </p>
@@ -49,6 +58,6 @@ export default function FinalCta() {
           {finalCta.signoff}
         </p>
       </div>
-    </section>
+    </ScrollScene>
   );
 }

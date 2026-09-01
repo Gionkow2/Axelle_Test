@@ -7,6 +7,8 @@ type Props = {
   flip?: boolean;
   /** rendered wave height */
   height?: number;
+  /** small vertical drift (px) so the seam breathes with the page */
+  drift?: number;
   className?: string;
 };
 
@@ -31,6 +33,7 @@ export default function SectionWave({
   edge = "bottom",
   flip = false,
   height = 90,
+  drift = 0,
   className = "",
 }: Props) {
   const transforms = [
@@ -41,21 +44,33 @@ export default function SectionWave({
     .join(" ");
 
   return (
+    // outer: position + optional scroll drift (own transform)
     <div
       aria-hidden
       className={`pointer-events-none absolute inset-x-0 z-[var(--z-media)] leading-[0] ${
         edge === "bottom" ? "bottom-[-1px]" : "top-[-1px]"
-      } ${className}`}
-      style={{ height, transform: transforms || undefined }}
+      } ${drift ? "wave-drift" : ""} ${className}`}
+      style={{
+        height,
+        ...(drift
+          ? ({ ["--wave-drift"]: `${drift}px` } as React.CSSProperties)
+          : {}),
+      }}
     >
-      <svg
-        viewBox="0 0 1440 160"
-        preserveAspectRatio="none"
+      {/* inner: edge/flip orientation, kept off the drifting transform */}
+      <div
         className="h-full w-full"
-        focusable="false"
+        style={{ transform: transforms || undefined }}
       >
-        <path d={WAVE_PATH} fill={FILL[color]} />
-      </svg>
+        <svg
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          className="h-full w-full"
+          focusable="false"
+        >
+          <path d={WAVE_PATH} fill={FILL[color]} />
+        </svg>
+      </div>
     </div>
   );
 }

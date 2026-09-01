@@ -161,52 +161,214 @@
   }
 }
 
-/* ----------------------------------------------------------- journey river */
+/* ================================================================= motion
+   Page-wide calm scroll motion. ONE controller (MotionController) writes
+   two custom properties on every [data-scene]:
+     --sp   0 … 1   progress through the viewport (sticky: pin → release)
+     --sc  -1 … 1   the same, centred (0 = scene centred)
+   The helpers below turn those into GPU-only transforms. --motion-scale
+   damps every layer together per breakpoint.
+   ------------------------------------------------------------------- */
+
+:root {
+  /* overall motion intensity — one dial for the whole page.
+     ~2× the first restrained pass; still calm, just more present. */
+  --motion-scale: 2;
+}
+@media (max-width: 1024px) {
+  :root {
+    --motion-scale: 1.2;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --motion-scale: 0.8;
+  }
+}
+
+/* pre-JS / no-JS resting values so first paint is the correct static frame */
+[data-scene] {
+  --sp: 0.5;
+  --sc: 0;
+}
+[data-scene="sticky"] {
+  --sp: 0;
+}
+
+.pl,
+.float-h {
+  --pspeed: 0px;
+  transform: translate3d(
+    0,
+    calc(var(--sc, 0) * var(--pspeed) * var(--motion-scale)),
+    0
+  );
+  will-change: transform;
+}
+
+.wave-drift {
+  transform: translate3d(
+    0,
+    calc(var(--sc, 0) * var(--wave-drift, 6px) * var(--motion-scale)),
+    0
+  );
+}
+
+/* --- sticky scene ------------------------------------------------- */
+.sticky-scene {
+  position: relative;
+  min-height: var(--sticky-len, 200svh);
+}
+.sticky-inner {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  isolation: isolate;
+}
+
+/* ------------------------------------------------------------------- hero */
+
+.hero-scene {
+  background: var(--color-shadow);
+}
+.hero-stage {
+  display: flex;
+  align-items: flex-end;
+  overflow: clip;
+  padding-block: 8rem 7rem;
+  background: var(--color-shadow);
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform: translate3d(0, calc(var(--sp) * 34px * var(--motion-scale)), 0)
+    scale(calc(1 + var(--sp) * 0.025));
+  will-change: transform;
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  transform: translate3d(0, calc(var(--sp) * -12px * var(--motion-scale)), 0);
+}
+.hero-body {
+  transform: translate3d(0, calc(var(--sp) * -10px * var(--motion-scale)), 0);
+}
+.hero-badges {
+  transform: translate3d(0, calc(var(--sp) * -30px * var(--motion-scale)), 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo,
+  .hero-content,
+  .hero-body,
+  .hero-badges {
+    transform: none !important;
+  }
+  .hero-stage {
+    min-height: 92svh;
+  }
+}
+
+/* --------------------------------------------------------------- services
+   Desktop: heading gently anchored while the cards flow past it, releasing
+   before the section ends. Mobile: plain stacked flow, no stickiness. */
+
+/* The heading is "gently anchored" by drifting slower than the cards rather
+   than by position:sticky. Sticky here corrupted the flow position of the
+   following <ul> (a real 56px overlap), and motion must never break a
+   correct layout. The heading/card speed difference gives the same read. */
+.services-head {
+  transform: translate3d(0, calc(var(--sc) * -16px * var(--motion-scale)), 0);
+}
+.service-card {
+  position: relative;
+  z-index: 1;
+  /* each card drifts a hair differently — 0 / 8 / 16px */
+  transform: translate3d(
+    0,
+    calc(var(--sc) * (8px + var(--card-i) * 7px) * var(--motion-scale)),
+    0
+  );
+}
+.service-photo {
+  transform: translate3d(0, calc(var(--sc) * 14px * var(--motion-scale)), 0)
+    scale(1.06);
+}
+
+/* ------------------------------------------------------ home / testimonials
+   / gift / vision / final — restrained per-section depth. */
+
+.ring-a {
+  transform: translate3d(0, calc(var(--sc) * 40px * var(--motion-scale)), 0);
+}
+.ring-b {
+  transform: translate3d(0, calc(var(--sc) * -26px * var(--motion-scale)), 0);
+}
+.quote-mark {
+  transform: translate3d(0, calc(var(--sc) * 18px * var(--motion-scale)), 0);
+}
+.gift-card-visual {
+  transform: translate3d(0, calc(var(--sc) * 26px * var(--motion-scale)), 0)
+    rotate(-7deg);
+}
+.cta-texture {
+  transform: translate3d(0, calc(var(--sc) * 24px * var(--motion-scale)), 0)
+    scale(1.05);
+}
+.footer-mark {
+  transform: translate3d(0, calc(var(--sc) * 8px * var(--motion-scale)), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-head,
+  .service-card,
+  .service-photo,
+  .ring-a,
+  .ring-b,
+  .quote-mark,
+  .cta-texture,
+  .footer-mark {
+    transform: none !important;
+  }
+  .gift-card-visual {
+    transform: rotate(-7deg) !important;
+  }
+}
+
+/* ----------------------------------------------------------- journey river
+   Self-contained: JourneyRibbon owns its own rAF scroll controller and
+   writes --flow / --drift onto .journey-ribbon (see the component). The page
+   MotionController does not touch this section. */
 
 .journey-ribbon {
-  /* driven from JS (rAF); safe defaults for no-JS / first paint */
-  --flow: 1; /* 1 = hidden, 0 = fully drawn   */
-  --drift: 0px; /* vertical parallax offset       */
+  --flow: 1; /* 1 = hidden, 0 = fully drawn */
+  --drift: 0px; /* vertical parallax offset  */
   position: absolute;
   inset: 0;
   z-index: var(--z-river);
   pointer-events: none;
   overflow: clip;
 }
-
 .journey-ribbon svg {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  /* vertical bleed so the drift transform never clips the ribbon */
+  top: -56px;
+  height: calc(100% + 112px);
   width: 100%;
-  height: 100%;
   transform: translate3d(0, var(--drift), 0);
   will-change: transform;
 }
-
 .journey-ribbon .jr-reveal-path {
   stroke-dashoffset: var(--flow);
 }
-
 .journey-ribbon .jr-glint {
   animation: jr-glint-move 3.6s linear infinite;
 }
-
 @keyframes jr-glint-move {
   to {
     stroke-dashoffset: -176;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .journey-ribbon {
-    --flow: 0 !important; /* show the finished stream, statically */
-    --drift: 0px !important;
-  }
-  .journey-ribbon svg {
-    transform: none;
-  }
-  .journey-ribbon .jr-glint {
-    display: none;
   }
 }
 
@@ -222,5 +384,31 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  /* freeze every page-wide motion layer into its static frame */
+  .pl,
+  .float-h,
+  .wave-drift {
+    transform: none !important;
+  }
+  .sticky-scene {
+    min-height: 0;
+  }
+  .sticky-inner {
+    position: static;
+    min-height: 0;
+  }
+
+  /* journey river: show the finished stream, statically */
+  .journey-ribbon {
+    --flow: 0 !important;
+    --drift: 0px !important;
+  }
+  .journey-ribbon svg {
+    transform: none;
+  }
+  .journey-ribbon .jr-glint {
+    display: none;
   }
 }
