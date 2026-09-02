@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Button from "@/app/components/ui/Button";
 import SectionWave from "@/app/components/ui/SectionWave";
 import EnsoMark from "@/app/components/ui/EnsoMark";
 import {
@@ -8,7 +7,6 @@ import {
 } from "@/app/components/motion/primitives";
 import { motion } from "@/lib/motion";
 import { services } from "@/lib/data/content";
-import { contact } from "@/lib/data/contact";
 
 const TONE: Record<
   "forest" | "green" | "brown",
@@ -93,12 +91,7 @@ export default function Services() {
           })}
         </ul>
 
-        <div className="mt-12 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-md text-forest/80">{services.footnote}</p>
-          <Button href={contact.bookingHref} on="light" variant="solid">
-            {services.cta.label}
-          </Button>
-        </div>
+
       </div>
 
       <SectionWave color="forest" height={80} flip drift={7} />

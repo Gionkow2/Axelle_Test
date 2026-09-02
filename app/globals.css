@@ -343,11 +343,21 @@
 .journey-ribbon {
   --flow: 1; /* 1 = hidden, 0 = fully drawn */
   --drift: 0px; /* vertical parallax offset  */
+  --river-rise: 24rem; /* how far the ribbon reaches up past the wrapper,
+                          so the river flows on from behind the About section */
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: calc(-1 * var(--river-rise));
   z-index: var(--z-river);
   pointer-events: none;
   overflow: clip;
+}
+@media (max-width: 767px) {
+  .journey-ribbon {
+    --river-rise: 12rem;
+  }
 }
 .journey-ribbon svg {
   position: absolute;

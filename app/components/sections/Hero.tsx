@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Button from "@/app/components/ui/Button";
-import Pill from "@/app/components/ui/Pill";
 import SectionWave from "@/app/components/ui/SectionWave";
 import BrandLogo from "@/app/components/ui/BrandLogo";
 import { StickyScene } from "@/app/components/motion/primitives";
@@ -77,14 +76,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* floating trust badges, bottom-right of the photo */}
-      <div className="hero-badges absolute bottom-28 right-[var(--gutter)] z-[3] hidden flex-col items-end gap-3 sm:flex md:flex-row">
-        {hero.badges.map((b) => (
-          <Pill key={b} tone="pale">
-            {b}
-          </Pill>
-        ))}
-      </div>
 
       <SectionWave color="pale" height={90} className="z-[4]" />
     </StickyScene>

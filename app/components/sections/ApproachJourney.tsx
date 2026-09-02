@@ -1,5 +1,4 @@
 import OrganicMedia from "@/app/components/ui/OrganicMedia";
-import Pill from "@/app/components/ui/Pill";
 import EnsoMark from "@/app/components/ui/EnsoMark";
 import JourneyRibbon from "@/app/components/ui/JourneyRibbon";
 import {
@@ -19,9 +18,10 @@ import { approach, organic } from "@/lib/data/content";
  */
 export default function ApproachJourney() {
   return (
-    // extra top / bottom room so the river flows in fully from the About
-    // section and out again before Services — never chopped at a seam
-    <div className="relative isolate overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.4)] pt-[calc(var(--section-y)*1.2)]">
+    // z-0 keeps this whole block (incl. the up-reaching river) behind the
+    // About section (z-5), so the river reads as flowing on from behind it.
+    // extra top / bottom room so the river never gets chopped at a seam.
+    <div className="relative isolate z-0 overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.4)] pt-[calc(var(--section-y)*1.1)]">
       <JourneyRibbon />
 
       {/* ---------------------------------------------------- holistic aanpak */}
@@ -44,8 +44,6 @@ export default function ApproachJourney() {
             <OrganicMedia
               image={approach.image}
               shape="arch"
-              frame="fresh"
-              frameSide="bl"
               sizes="(max-width: 1024px) 85vw, 38vw"
               ratio="4 / 5"
             />
@@ -95,13 +93,16 @@ export default function ApproachJourney() {
                 <p key={p}>{p}</p>
               ))}
             </div>
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              {organic.tags.map((t) => (
-                <Pill key={t} tone="pale">
-                  {t}
-                </Pill>
+            <ul className="mt-9 grid grid-cols-3 gap-4">
+              {organic.tags.map((tags) => (
+                <li key={tags} className="border-t border-pale/25 pt-3">
+                  <span className="block font-display text-xl text-fresh text-pale opacity-90">
+                    {tags}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
+            
           </div>
 
           <div className="relative mx-auto w-full max-w-[26rem]">
@@ -109,8 +110,6 @@ export default function ApproachJourney() {
               <OrganicMedia
                 image={organic.image}
                 shape="arch"
-                frame="pale"
-                frameSide="br"
                 sizes="(max-width: 1024px) 85vw, 38vw"
                 ratio="4 / 5"
               />

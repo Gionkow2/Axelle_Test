@@ -16,7 +16,7 @@ export default function About() {
   return (
     <ScrollScene
       id={about.id}
-      className="relative overflow-hidden bg-pale py-[var(--section-y)]"
+      className="relative z-[5] overflow-hidden py-[var(--section-y)]"
     >
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         {/* copy */}
@@ -28,7 +28,7 @@ export default function About() {
             {about.title}
           </FloatingHeading>
 
-          <p className="mt-7 text-xl leading-snug text-forest">{about.lead}</p>
+          <p className="prose-kokoro mt-7 text-forest/85">{about.lead}</p>
 
           <div className="prose-kokoro mt-5 text-forest/85">
             {about.paragraphs.map((p) => (
@@ -66,27 +66,11 @@ export default function About() {
             />
           </ParallaxLayer>
 
-          {/* badge — "opgeleid in Thailand" */}
-          <div className="absolute -left-4 top-8 grid h-28 w-28 rotate-[-8deg] place-items-center rounded-full bg-fresh text-center sm:-left-8">
-            <span className="px-3 text-[0.85rem] font-semibold leading-tight text-shadow">
-              {about.imageBadge}
-            </span>
-          </div>
+          {/* badge — "opgeleid in Thailand"  weg gelaten*/}
 
-          {/* inset — hands */}
-          <ParallaxLayer
-            speed={motion.about.insetShift}
-            className="absolute -bottom-10 -left-6 w-40 sm:w-48"
-          >
-            <OrganicMedia
-              image={about.inset}
-              shape="arch"
-              frame="pale"
-              frameSide="bl"
-              sizes="12rem"
-              ratio="3 / 4"
-            />
-          </ParallaxLayer>
+
+          {/* inset — hands weg*/}
+
         </div>
       </div>
     </ScrollScene>
