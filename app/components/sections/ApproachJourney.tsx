@@ -18,10 +18,10 @@ import { approach, organic } from "@/lib/data/content";
  */
 export default function ApproachJourney() {
   return (
-    // z-0 keeps this whole block (incl. the up-reaching river) behind the
-    // About section (z-5), so the river reads as flowing on from behind it.
-    // extra top / bottom room so the river never gets chopped at a seam.
-    <div className="relative isolate z-0 overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.4)] pt-[calc(var(--section-y)*1.1)]">
+    // The river lives entirely inside this wrapper (never behind About). The
+    // big top padding is the pale gap BETWEEN the sections where the river's
+    // whole opening curve flows in, uncut.
+    <div className="relative isolate overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.5)] pt-[calc(var(--section-y)*3.6)]">
       <JourneyRibbon />
 
       {/* ---------------------------------------------------- holistic aanpak */}

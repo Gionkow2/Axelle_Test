@@ -16,7 +16,7 @@ export default function About() {
   return (
     <ScrollScene
       id={about.id}
-      className="relative z-[5] overflow-hidden py-[var(--section-y)]"
+      className="relative overflow-hidden bg-pale py-[var(--section-y)]"
     >
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         {/* copy */}

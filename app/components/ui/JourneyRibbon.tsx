@@ -17,7 +17,9 @@ import { useEffect, useRef } from "react";
  * re-render per scroll event: we only poke two CSS custom properties.
  */
 
-const VIEWBOX = "0 0 1440 1920";
+/* viewBox carries ~170u of headroom above and ~120u below the path so the
+   178-wide stroked curve is never chopped at the top or bottom edge. */
+const VIEWBOX = "0 -170 1440 2290";
 
 // exact path from the brief
 const DESKTOP_PATH =
@@ -59,15 +61,15 @@ function RibbonPaths({ id, d, className }: RibbonPathsProps) {
         d={d}
         stroke="#9CAD52"
         strokeWidth={178}
-        strokeOpacity={0.26}
+        strokeOpacity={0.32}
         strokeLinecap="round"
       />
       {/* 2 · faint permanent blue guide */}
       <path
         d={d}
         stroke="#D9F0FF"
-        strokeWidth={34}
-        strokeOpacity={0.2}
+        strokeWidth={40}
+        strokeOpacity={0.28}
         strokeLinecap="round"
       />
 
@@ -129,10 +131,10 @@ export default function JourneyRibbon() {
       const raw = (vh * 0.8 - rect.top) / (rect.height + vh * 0.6);
       target = 1 - Math.min(1, Math.max(0, raw));
 
-      // secondary: gentle vertical parallax, ~30px each way (the SVG has
-      // vertical bleed in CSS so this never clips the ribbon)
+      // secondary: gentle vertical parallax, ~8px each way (kept small so the
+      // 16px CSS bleed always covers it — no clipping)
       const seen = (vh - rect.top) / (vh + rect.height);
-      drift = (Math.min(1, Math.max(0, seen)) - 0.5) * 60;
+      drift = (Math.min(1, Math.max(0, seen)) - 0.5) * 16;
 
       // near viewport? keep easing. otherwise snap and rest.
       return rect.bottom > -vh && rect.top < vh * 2;

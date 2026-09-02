@@ -343,29 +343,21 @@
 .journey-ribbon {
   --flow: 1; /* 1 = hidden, 0 = fully drawn */
   --drift: 0px; /* vertical parallax offset  */
-  --river-rise: 24rem; /* how far the ribbon reaches up past the wrapper,
-                          so the river flows on from behind the About section */
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: calc(-1 * var(--river-rise));
+  inset: 0; /* contained in its wrapper — sits in the gap between sections,
+               never behind the section above */
   z-index: var(--z-river);
   pointer-events: none;
   overflow: clip;
-}
-@media (max-width: 767px) {
-  .journey-ribbon {
-    --river-rise: 12rem;
-  }
 }
 .journey-ribbon svg {
   position: absolute;
   left: 0;
   right: 0;
-  /* vertical bleed so the drift transform never clips the ribbon */
-  top: -56px;
-  height: calc(100% + 112px);
+  /* small bleed for the ±8px drift; the viewBox carries the real headroom
+     so the stroked curve is never chopped at the top or bottom */
+  top: -16px;
+  height: calc(100% + 32px);
   width: 100%;
   transform: translate3d(0, var(--drift), 0);
   will-change: transform;
