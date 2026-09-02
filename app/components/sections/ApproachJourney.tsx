@@ -21,7 +21,7 @@ export default function ApproachJourney() {
     // The river lives entirely inside this wrapper (never behind About). The
     // big top padding is the pale gap BETWEEN the sections where the river's
     // whole opening curve flows in, uncut.
-    <div className="relative isolate overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.5)] pt-[calc(var(--section-y)*3.6)]">
+    <div className="relative isolate overflow-x-clip bg-pale pb-[calc(var(--section-y)*0.5)] pt-[calc(var(--section-y)*1.1)]">
       <JourneyRibbon />
 
       {/* ---------------------------------------------------- holistic aanpak */}

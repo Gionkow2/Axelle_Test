@@ -17,9 +17,10 @@ import { useEffect, useRef } from "react";
  * re-render per scroll event: we only poke two CSS custom properties.
  */
 
-/* viewBox carries ~170u of headroom above and ~120u below the path so the
-   178-wide stroked curve is never chopped at the top or bottom edge. */
-const VIEWBOX = "0 -170 1440 2290";
+/* viewBox headroom above/below the path so the 178-wide stroked riverbed
+   isn't chopped at the top edge; tune the top value to shift the whole
+   river up/down within its wrapper without moving any content. */
+const VIEWBOX = "0 -55 1440 2290";
 
 // exact path from the brief
 const DESKTOP_PATH =
