@@ -69,6 +69,20 @@ export const images = {
     height: 1375,
     alt: "Axelle Michiels, omringd door groene bladeren",
   },
+  /** Close-up van Axelle tussen de wilgentakken — "Welkom, ik ben Axelle". */
+  axelleAbout: {
+    src: "/assets/kokoro/axelle-about.jpg",
+    width: 1600,
+    height: 1200,
+    alt: "Axelle Michiels in het zonlicht tussen de wilgenbladeren",
+  },
+  /** Axelle lachend in een veld met hoog gras — laatste CTA. */
+  axelleCta: {
+    src: "/assets/kokoro/axelle-cta.png",
+    width: 1360,
+    height: 1560,
+    alt: "Axelle Michiels lacht in een veld met hoog gras",
+  },
 } satisfies Record<string, ImageAsset>;
 
 /* -------------------------------------------------------------------- site */
@@ -91,14 +105,12 @@ export const nav: NavLink[] = [
 /* -------------------------------------------------------------------- hero */
 
 export const hero = {
-  eyebrow: "Aandacht voor lichaam & geest",
-  welcome: "Welkom bij Kokoro",
-  titleLead: "Jouw plek voor",
-  titleAccent: "rust & welzijn.",
-  body: "Kom tot rust en laat je hoofd volledig leegmaken. Met mijn holistische aanpak zorg ik voor de massage die jij op dit moment nodig hebt.",
-  primary: { label: "Massage boeken", href: "#afspraak" } as Cta,
-  secondary: { label: "Mijn aanpak", href: "#aanpak" } as Cta,
-  badges: ["100% biologische producten", "Op jouw maat"],
+  welcome: "Jouw plek voor rust en welzijn",
+  title: "Kokoro Organic Massage",
+  quote: "Slowing down is medicine.",
+  body: "Kom tot rust en laat jouw lichaam volledig ontspannen. Met mijn intuïtieve aanpak zorg ik voor de massage die jij op dit moment nodig hebt.",
+  primary: { label: "Massages", href: "#massages" } as Cta,
+  secondary: { label: "Over mij", href: "#over-axelle" } as Cta,
   image: images.heroMassage,
 };
 
@@ -116,7 +128,7 @@ export const about = {
   signatureName: "Axelle Michiels",
   signatureRole: "Holistisch masseuse",
   imageBadge: "opgeleid in Thailand",
-  image: images.axellePortrait,
+  image: images.axelleAbout,
   inset: images.handsClasped,
 };
 
@@ -265,10 +277,8 @@ export const finalCta = {
   eyebrow: "Jouw moment wacht",
   title: "Klaar voor jouw moment van rust?",
   body: "Jij verdient dit. Boek vandaag nog je afspraak en voel binnenkort hoe fijn het is om weer helemaal opgeladen te zijn.",
-  primary: { label: "Boek je massage", href: "" } as Cta, // href filled from contact
-  secondary: { label: "Stuur een bericht", href: "" } as Cta,
-  signoff: "Tot snel!",
-  image: images.handWildflowers,
+  primary: { label: "Massage boeken", href: "" } as Cta, // href filled from contact (WhatsApp)
+  image: images.axelleCta,
 };
 
 /* ------------------------------------------------------------------ footer */

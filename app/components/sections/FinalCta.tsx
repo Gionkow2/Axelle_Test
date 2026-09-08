@@ -1,62 +1,57 @@
 import Image from "next/image";
 import Button from "@/app/components/ui/Button";
-import {
-  ScrollScene,
-  FloatingHeading,
-} from "@/app/components/motion/primitives";
-import { motion } from "@/lib/motion";
+import { ScrollScene } from "@/app/components/motion/primitives";
 import { finalCta } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
 /**
- * FinalCta — the page's last breath. Only the background texture and the
- * heading move, and barely; the buttons are completely stable so the closing
- * action is never a moving target.
+ * FinalCta — a warm, hearty close. A horizontal green banner the full width of
+ * the card row: the photograph of Axelle sits faded into the left of the
+ * background (same treatment as the hero), the copy and the single action
+ * (book via WhatsApp) sit to the right on solid green. Yellow section ground.
  */
 export default function FinalCta() {
   return (
     <ScrollScene
       id={finalCta.id}
-      className="on-dark relative isolate overflow-hidden bg-shadow py-[calc(var(--section-y)+3rem)] text-pale"
+      className="relative overflow-hidden bg-pale py-[calc(var(--section-y)*0.7)]"
     >
-      <Image
-        src={finalCta.image.src}
-        alt=""
-        aria-hidden
-        fill
-        sizes="100vw"
-        className="cta-texture -z-10 object-cover"
-      />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-shadow/85" />
+      <div className="shell">
+        <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-shadow px-8 py-12 text-pale shadow-[0_30px_70px_-40px_rgba(38,64,5,0.45)] md:px-12 md:py-14">
+          {/* faded photograph on the background — decorative, like the hero */}
+          <div aria-hidden className="absolute inset-0">
+            <Image
+              src={finalCta.image.src}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover object-[22%_center] opacity-40"
+            />
+          </div>
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-r from-shadow/35 via-shadow/80 to-shadow"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-shadow/80 via-shadow/10 to-shadow/35"
+          />
 
-      <div className="shell text-center">
-        <FloatingHeading
-          speed={motion.finalCta.headingShift}
-          className="display-1 mx-auto max-w-[16ch] text-pale"
-        >
-          {finalCta.title}
-        </FloatingHeading>
-        <p className="mx-auto mt-6 max-w-xl text-lg text-pale/85">
-          {finalCta.body}
-        </p>
+          {/* copy — pushed to the right, clear of the photo */}
+          <div className="relative z-10 text-center md:ml-auto md:max-w-lg md:pl-8 md:text-left">
+            <p className="eyebrow text-fresh">{finalCta.eyebrow}</p>
+            <h2 className="mt-3 font-display text-2xl leading-tight text-pale sm:text-[1.9rem]">
+              {finalCta.title}
+            </h2>
+            <p className="mt-4 text-pale/85">{finalCta.body}</p>
 
-        <div className="mt-9 flex flex-wrap justify-center gap-4">
-          <Button href={contact.bookingHref} on="dark" variant="solid">
-            {finalCta.primary.label}
-          </Button>
-          <Button
-            href={`mailto:${contact.email}`}
-            on="dark"
-            variant="ghost"
-            withArrow={false}
-          >
-            {finalCta.secondary.label}
-          </Button>
+            <div className="mt-8">
+              <Button href={contact.whatsappHref} on="dark" variant="solid">
+                {finalCta.primary.label}
+              </Button>
+            </div>
+          </div>
         </div>
-
-        <p className="mt-10 font-display text-2xl text-fresh">
-          {finalCta.signoff}
-        </p>
       </div>
     </ScrollScene>
   );

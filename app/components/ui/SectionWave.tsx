@@ -1,6 +1,6 @@
 type Props = {
   /** fill of the wave — normally the colour of the *next* section */
-  color: "pale" | "fresh" | "shadow" | "forest" | "sky";
+  color: "pale" | "pale-warm" | "fresh" | "shadow" | "forest" | "sky";
   /** sit at the bottom (default) or the top edge of the parent section */
   edge?: "bottom" | "top";
   /** mirror horizontally so consecutive waves don't repeat */
@@ -14,6 +14,7 @@ type Props = {
 
 const FILL: Record<Props["color"], string> = {
   pale: "var(--color-pale)",
+  "pale-warm": "var(--color-pale-warm)",
   fresh: "var(--color-fresh)",
   shadow: "var(--color-shadow)",
   forest: "var(--color-forest)",

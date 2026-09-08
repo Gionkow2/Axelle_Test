@@ -29,7 +29,8 @@ export const motion = {
   },
 
   services: {
-    markShift: -40,
+    /** one drift for the whole section — heading, cards and banner together */
+    shift: -18,
   },
 
   home: {

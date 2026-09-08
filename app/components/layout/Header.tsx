@@ -6,6 +6,24 @@ import BrandLogo from "@/app/components/ui/BrandLogo";
 import { nav } from "@/lib/data/content";
 import { contact } from "@/lib/data/contact";
 
+function PhoneIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      aria-hidden
+      focusable="false"
+      className="shrink-0"
+    >
+      <path
+        d="M6.6 10.8a15.3 15.3 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 /**
  * Sticky site header. Transparent over the dark hero, then solidifies once
  * the hero is scrolled past. Mobile navigation is a real <button> +
@@ -47,7 +65,7 @@ export default function Header() {
           : "bg-transparent"
       } ${dark ? "on-dark" : ""}`}
     >
-      <div className="shell flex items-center justify-between gap-6 py-4">
+      <div className="shell flex items-center gap-6 py-4">
         <Link
           href="#top"
           className="shrink-0"
@@ -61,10 +79,10 @@ export default function Header() {
           />
         </Link>
 
-        {/* desktop nav */}
+        {/* desktop nav — menu items right-aligned */}
         <nav
           aria-label="Hoofdnavigatie"
-          className={`hidden items-center gap-8 lg:flex ${textClass}`}
+          className={`ml-auto hidden items-center gap-8 lg:flex ${textClass}`}
         >
           {nav.map((item) => (
             <Link
@@ -76,7 +94,9 @@ export default function Header() {
             </Link>
           ))}
           <a
-            href={contact.bookingHref}
+            href={contact.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`rounded-[var(--radius-pill)] border px-5 py-2.5 text-[0.95rem] font-semibold transition-colors ${
               dark
                 ? "border-pale/55 text-pale hover:bg-pale hover:text-shadow"
@@ -87,11 +107,21 @@ export default function Header() {
           </a>
         </nav>
 
+        {/* phone number — far right on desktop, after the menu items */}
+        <a
+          href={contact.phoneHref}
+          className={`hidden items-center gap-2 text-[0.95rem] font-semibold underline-offset-8 transition hover:underline lg:inline-flex ${textClass}`}
+          aria-label={`Bel ${contact.phoneDisplay}`}
+        >
+          <PhoneIcon />
+          {contact.phoneDisplay}
+        </a>
+
         {/* mobile toggle */}
         <button
           ref={toggleRef}
           type="button"
-          className={`inline-flex h-11 w-11 items-center justify-center rounded-full border lg:hidden ${
+          className={`ml-auto inline-flex h-11 w-11 items-center justify-center rounded-full border lg:hidden ${
             dark ? "border-pale/50 text-pale" : "border-shadow/30 text-shadow"
           }`}
           aria-expanded={open}
@@ -141,7 +171,17 @@ export default function Header() {
             </Link>
           ))}
           <a
-            href={contact.bookingHref}
+            href={contact.phoneHref}
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 rounded-lg px-2 py-3 text-lg font-semibold hover:bg-shadow/5"
+          >
+            <PhoneIcon />
+            {contact.phoneDisplay}
+          </a>
+          <a
+            href={contact.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="mt-2 rounded-[var(--radius-pill)] bg-shadow px-5 py-3 text-center text-base font-semibold text-pale"
           >

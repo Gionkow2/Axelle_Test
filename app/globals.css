@@ -172,17 +172,17 @@
 
 :root {
   /* overall motion intensity — one dial for the whole page.
-     ~2× the first restrained pass; still calm, just more present. */
-  --motion-scale: 2;
+     Deliberately gentle: ~40% softer than the previous pass. */
+  --motion-scale: 1.2;
 }
 @media (max-width: 1024px) {
   :root {
-    --motion-scale: 1.2;
+    --motion-scale: 0.72;
   }
 }
 @media (max-width: 767px) {
   :root {
-    --motion-scale: 0.8;
+    --motion-scale: 0.48;
   }
 }
 
@@ -246,22 +246,16 @@
     scale(calc(1 + var(--sp) * 0.025));
   will-change: transform;
 }
+/* the whole hero copy block (heading + supporting line + CTAs) drifts as ONE
+   unit — nothing inside it moves relative to anything else. */
 .hero-content {
   position: relative;
   z-index: 3;
   transform: translate3d(0, calc(var(--sp) * -12px * var(--motion-scale)), 0);
 }
-.hero-body {
-  transform: translate3d(0, calc(var(--sp) * -10px * var(--motion-scale)), 0);
-}
-.hero-badges {
-  transform: translate3d(0, calc(var(--sp) * -30px * var(--motion-scale)), 0);
-}
 @media (prefers-reduced-motion: reduce) {
   .hero-photo,
-  .hero-content,
-  .hero-body,
-  .hero-badges {
+  .hero-content {
     transform: none !important;
   }
   .hero-stage {
@@ -270,30 +264,9 @@
 }
 
 /* --------------------------------------------------------------- services
-   Desktop: heading gently anchored while the cards flow past it, releasing
-   before the section ends. Mobile: plain stacked flow, no stickiness. */
-
-/* The heading is "gently anchored" by drifting slower than the cards rather
-   than by position:sticky. Sticky here corrupted the flow position of the
-   following <ul> (a real 56px overlap), and motion must never break a
-   correct layout. The heading/card speed difference gives the same read. */
-.services-head {
-  transform: translate3d(0, calc(var(--sc) * -16px * var(--motion-scale)), 0);
-}
-.service-card {
-  position: relative;
-  z-index: 1;
-  /* each card drifts a hair differently — 0 / 8 / 16px */
-  transform: translate3d(
-    0,
-    calc(var(--sc) * (8px + var(--card-i) * 7px) * var(--motion-scale)),
-    0
-  );
-}
-.service-photo {
-  transform: translate3d(0, calc(var(--sc) * 14px * var(--motion-scale)), 0)
-    scale(1.06);
-}
+   The whole section (heading + cards + aan-huis banner + decorative mark)
+   drifts as ONE unit via a single .pl wrapper — no element moves relative to
+   any other. Nothing section-specific to add here. */
 
 /* ------------------------------------------------------ home / testimonials
    / gift / vision / final — restrained per-section depth. */
@@ -308,8 +281,8 @@
   transform: translate3d(0, calc(var(--sc) * 18px * var(--motion-scale)), 0);
 }
 .gift-card-visual {
-  transform: translate3d(0, calc(var(--sc) * 26px * var(--motion-scale)), 0)
-    rotate(-7deg);
+  transform: translate3d(0, calc(var(--sc) * 8px * var(--motion-scale)), 0)
+    rotate(-2deg);
 }
 .cta-texture {
   transform: translate3d(0, calc(var(--sc) * 24px * var(--motion-scale)), 0)
@@ -320,9 +293,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .services-head,
-  .service-card,
-  .service-photo,
   .ring-a,
   .ring-b,
   .quote-mark,
@@ -331,7 +301,7 @@
     transform: none !important;
   }
   .gift-card-visual {
-    transform: rotate(-7deg) !important;
+    transform: rotate(-2deg) !important;
   }
 }
 
