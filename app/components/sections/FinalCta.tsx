@@ -25,7 +25,8 @@ export default function FinalCta() {
               alt=""
               fill
               sizes="100vw"
-              className="object-cover object-[22%_center] opacity-40"
+              className="object-cover opacity-40"
+              style={{ objectPosition: "22% calc(50% - 80px)" }}
             />
           </div>
           <div
